@@ -5,15 +5,15 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+  async function handleLogin(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     setIsSubmitting(true);
     //console.log(event.target);
     //console.log(event.currentTarget);
     const formData = new FormData(event.currentTarget);
-    const username = formData.get('username')?.toString() || '';
-    const password = formData.get('password')?.toString() || '';
+    const username = formData.get('username')?.toString() ?? '';
+    const password = formData.get('password')?.toString() ?? '';
     console.log('Username:', username);
     console.log('Password:', password);
 
@@ -40,6 +40,7 @@ export default function Login() {
       setError('Network error. Please try again later.');
     }finally {
       setIsSubmitting(false);
+      console.log('Login process completed.');
     }
 
   }
@@ -47,7 +48,8 @@ export default function Login() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <h1>Login Page</h1>
+      <form onSubmit={handleLogin}>
         <div>
           <label htmlFor="username">Username:
             <input type="email" id="username" name="username" autoComplete="username" required />
