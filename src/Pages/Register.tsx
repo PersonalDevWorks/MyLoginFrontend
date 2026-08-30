@@ -1,4 +1,5 @@
 import { useState, type SubmitEvent } from 'react';
+import { Link } from 'react-router-dom';
 
 type RegisterDataErrorType = {
   fname?: string;
@@ -30,19 +31,19 @@ $
   }
   if (!data.username.trim()) {
     errors.username = 'Username is required.';
-  }else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.username)) {
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.username)) {
     errors.username = 'Username must be a valid email address.';
   }
 
   if (!data.password) {
     errors.password = 'Password is required.';
-  }else if (!passwordRegex.test(data.password)) {
+  } else if (!passwordRegex.test(data.password)) {
     errors.password = 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.';
   }
 
   if (!data.confirmPassword) {
     errors.confirmPassword = 'Please confirm your password.';
-  }else if (data.password !== data.confirmPassword) {
+  } else if (data.password !== data.confirmPassword) {
     errors.confirmPassword = 'Passwords do not match.';
   }
 
@@ -53,19 +54,21 @@ export default function Register() {
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<RegisterDataErrorType>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
 
   async function handleRegister(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     setFieldErrors({});
+    setIsRegistered(false);
 
     const formData = new FormData(event.currentTarget);
 
     const userRegisterData = {
-      fname: formData.get('fname')?.toString() ?? '' ,
-      lname: formData.get('lname')?.toString() ?? '' ,
-      username: formData.get('username')?.toString() ?? '' ,
-      password: formData.get('password')?.toString() ?? '' ,
+      fname: formData.get('fname')?.toString() ?? '',
+      lname: formData.get('lname')?.toString() ?? '',
+      username: formData.get('username')?.toString() ?? '',
+      password: formData.get('password')?.toString() ?? '',
       confirmPassword: formData.get('confirmPassword')?.toString() ?? ''
     };
 
@@ -104,11 +107,11 @@ export default function Register() {
 
       const data = await response.json();
       console.log('Registration successful:', data);
-
-    }catch (error) {
+      setIsRegistered(true);
+    } catch (error) {
       console.error('Error during registration:', error);
       setError('Network error. Please try again later.');
-    }finally {
+    } finally {
       setIsSubmitting(false);
       console.log('Registration process completed.');
     }
@@ -157,6 +160,10 @@ export default function Register() {
           </button>
         </div>
       </form>
+      {isRegistered && <div style={{ color: 'green' }}>Registration successful! You can now log in.
+        <Link to="/login">Go to Login</Link>
+      </div>
+      }
     </div>
   );
 }
