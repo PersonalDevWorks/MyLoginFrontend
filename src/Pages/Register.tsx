@@ -1,5 +1,5 @@
 import { useState, type SubmitEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 
 type RegisterDataErrorType = {
   fname?: string;
@@ -55,6 +55,7 @@ export default function Register() {
   const [fieldErrors, setFieldErrors] = useState<RegisterDataErrorType>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+  const navigate = useNavigate();
 
   async function handleRegister(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -108,6 +109,7 @@ export default function Register() {
       const data = await response.json();
       console.log('Registration successful:', data);
       setIsRegistered(true);
+      navigate('/login'); // Redirect to login page after successful registration
     } catch (error) {
       console.error('Error during registration:', error);
       setError('Network error. Please try again later.');
