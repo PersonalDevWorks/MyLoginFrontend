@@ -86,7 +86,7 @@ export default function Register() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:8080/api/register', {
+      const response = await fetch('http://localhost:8080/api/v1/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
