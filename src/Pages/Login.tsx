@@ -1,14 +1,19 @@
 import { useState, type SubmitEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-
+  
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
 
   async function handleLogin(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     setIsSubmitting(true);
+    setIsLoggedIn(false);
     //console.log(event.target);
     //console.log(event.currentTarget);
     const formData = new FormData(event.currentTarget);
@@ -18,7 +23,7 @@ export default function Login() {
     console.log('Password:', password);
 
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch('http://localhost:8080/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -34,7 +39,8 @@ export default function Login() {
 
       const data = await response.json();
       console.log('Login successful:', data);
-
+      setIsLoggedIn(true);
+      navigate('/dashboard'); // Navigate to the dashboard page after successful login
     }catch (error) {
       console.error('Error during login:', error);
       setError('Network error. Please try again later.');
