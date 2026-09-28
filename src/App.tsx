@@ -5,6 +5,7 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import NotFound from './Pages/NotFound';
 import Dashboard from './Pages/Dashboad';
+import PrivateRoute from './Components/PrivateRoute';
 
 function App() {
   
@@ -15,7 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
